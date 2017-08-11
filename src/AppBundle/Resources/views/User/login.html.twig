@@ -1,4 +1,18 @@
 {% extends "AppBundle:Layouts:layouts.html.twig" %}
+
 {% block content %}
-<h1>Página de {{titulo}}</h1>
+    <div class="box-form col-lg-4">
+        <h2>Identificarse</h2>
+        <hr/>
+        <form action="{{path("login_check")}}" method="POST">
+            
+            <label></label>
+            <input type="email" id="username" name="_username" value="{{ last_username }}" placeholder="Email" class="form-control" />
+            <label></label>
+            <input type="password" id="password" name="_password"  class="form-control" placeholder="Contraseña" />
+            
+            <input type="submit" id="login_button" value="Entrar" class="btn btn-success" />
+            <input type="hidden" name="_target_path" value="/home" />
+        </form>
+    </div>
 {% endblock %}

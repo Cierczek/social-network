@@ -12,6 +12,6 @@ body{
     float: none;
 }
 
-button#backendbundle_user_Registrarse{
+button#backendbundle_user_Registrarse, input#login_button{
     margin-top: 20px;
 }

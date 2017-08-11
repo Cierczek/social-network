@@ -1,0 +1,17 @@
+login:
+    path:     /login
+    defaults: { _controller: AppBundle:User:login }
+
+register:
+    path:     /register
+    defaults: { _controller: AppBundle:User:register }
+    
+ajax_nick_test:
+    path:     /nick-test
+    defaults: { _controller: AppBundle:User:nickTest }
+    methods: [POST]
+    
+ajax_email_test:
+    path:     /email-test
+    defaults: { _controller: AppBundle:User:emailTest }
+    methods: [POST]

@@ -1,9 +1,15 @@
-/*Generales*/
+/*General*/
 body{
     background: #eee;
 }
-/*Registro*/
-.box-form{
+
+/*Navbar*/
+ul.nav.navbar-nav span.glyphicon {
+    margin-right: 4px;
+}
+
+/*Login and Register Layout*/
+.box-form.login, .box-form.register{
     background: #FFFFFF;
     border:1px solid #ccc;
     padding: 20px;
@@ -12,6 +18,7 @@ body{
     float: none;
 }
 
-button#backendbundle_user_Registrarse, input#login_button{
+/*Form Button*/
+button#backendbundle_user_Registrarse, input#login_button,button#backendbundle_user_Guardar{
     margin-top: 20px;
 }

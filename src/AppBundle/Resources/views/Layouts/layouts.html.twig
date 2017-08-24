@@ -32,10 +32,10 @@
                     </a>
                 </div>
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
                     {% if app.user == null %}   
-                        <ul class="nav navbar-nav">
                             <li>
-                                <a href="{{path("app_hompage")}}">
+                                <a href="{{path("login")}}">
                                     <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>
                                         Entrar
                                 </a>
@@ -46,12 +46,41 @@
                                     Registro
                                 </a>
                             </li>
-                        </ul>
+                        
+                    {% else %}
+                            <li>
+                                <a href="{{path("app_hompage")}}">
+                                    Inicio
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{path("user_list")}}">
+                                    Gente
+                                </a>
+                            </li>
+                            <li>
+                                <form action="{{ path('user_search')}}" class="navbar-form navbar-left">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" placeholder="Buscar gente" name="search">
+                                    </div>
+                                    <button type="submit" class="btn btn-default">
+                                        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                                    </button>
+                                </form>
+                            </li>
+                    </ul>
                     {% endif %}
                     {% if app.user != null %}
                         <ul class="nav navbar-nav navbar-right">
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <div class="avatar">
+                                        {%if app.user.image == 'null'%}
+                                            <img src="{{asset('assets/images/default.png')}}" />                                           
+                                        {%else%}
+                                            <img src="{{asset('/uploads/users/'~app.user.email~app.user.id~'/'~app.user.image)}}" />
+                                        {%endif%}
+                                    </div>
                                     {{app.user.name|capitalize}} {{app.user.surname|capitalize}}
                                     <spna class="caret"></span>
                                 </a>
@@ -93,17 +122,6 @@
         </nav>
     </header>
     <section id="content">
-        <div class="container">
-        <div class="col-lg-11">
-           {% for type, flashes in app.session.flashbag.all %}
-               {% for flash in flashes %}
-                   <div class="alert alert-{{ type }} fade in">
-                       {{ flash }}
-                    </div>
-                {% endfor %}
-            {% endfor %}
-        </div>
-        </div>
         <div class="clear-fix"></div>
             {% block content %}
                 Content Default 

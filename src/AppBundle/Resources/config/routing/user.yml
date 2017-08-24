@@ -15,6 +15,14 @@ register:
 user_edit:
     path:     /my-data
     defaults: { _controller: AppBundle:User:editUser }
+
+user_list:
+    path:     /people
+    defaults: { _controller: AppBundle:User:users }
+    
+user_search:
+    path:     /search
+    defaults: { _controller: AppBundle:User:search }
     
 ajax_nick_test:
     path:     /nick-test

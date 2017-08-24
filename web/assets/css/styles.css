@@ -3,13 +3,29 @@ body{
     background: #eee;
 }
 
-/*Navbar*/
+/*Header*/
 ul.nav.navbar-nav span.glyphicon {
     margin-right: 4px;
 }
 
+.navbar-collapse .avatar{
+    background: #fff;
+    border-radius: 500px;
+    width: 30px;
+    height: 30px;
+    overflow: hidden;
+    float: left;
+    margin-right: 12px;
+    margin-top: -3px;
+}
+
+.navbar-collapse .avatar img{
+    height: 100%;
+    text-align: center;
+}
+
 /*Login and Register Layout*/
-.box-form.login, .box-form.register{
+.box-form.login, .box-form.register, .box-default.people{
     background: #FFFFFF;
     border:1px solid #ccc;
     padding: 20px;
@@ -18,7 +34,45 @@ ul.nav.navbar-nav span.glyphicon {
     float: none;
 }
 
+.box-form.register.col-lg-6 ul {
+    padding-left: 0px;
+}
+
+.box-form.register.col-lg-6 ul li {
+    list-style: none;
+    padding: 10px;
+    background-color: #ff0039;
+    color: #fff;
+}
+
 /*Form Button*/
 button#backendbundle_user_Registrarse, input#login_button,button#backendbundle_user_Guardar{
     margin-top: 20px;
+}
+
+/*Pepole page*/
+.col-lg-12.user-item {
+    border: 1px solid #eee;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.user-item .avatar{
+    background: #eee;
+    border-radius: 500px;
+    width: 75px;
+    height: 75px;
+    overflow: hidden;
+    float:left;
+    border: 1px solid #eee;
+}
+
+.user-item .avatar img{
+    width: 100%;
+}
+
+.user-item .user-item-content{
+    padding: 10px;
+    margin-left:85px;
+    
 }

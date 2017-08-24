@@ -1,11 +1,19 @@
 {% extends "AppBundle:Layouts:layouts.html.twig" %}
 
 {% block content %}
+    <div class="container">
+        <div class="col-lg-11">
+            {% if errors %}
+                <div class="alert alert-danger">
+                    {{ errors.messageKey|trans(errors.messageData, 'security') }}
+                </div>
+            {% endif %}
+        </div>
+    </div>
     <div class="box-form login col-lg-4">
         <h2>Identificarse</h2>
         <hr/>
         <form action="{{path("login_check")}}" method="POST">
-            
             <label></label>
             <input type="email" id="username" name="_username" value="{{ last_username }}" placeholder="Email" class="form-control" />
             <label></label>

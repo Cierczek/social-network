@@ -1,5 +1,5 @@
 $(document).ready(function(){
-    var home_url = window.location.protocol + "//" + window.location.host + "/social-network/web/app_dev.php";
+    var home_url = window.location.protocol + "//" + window.location.host + "/web/app_dev.php";
     
     $(".nick-input").blur(function(){
         var nick = this.value;

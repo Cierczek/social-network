@@ -58,7 +58,7 @@
 
     {% if next is defined %}
         <li>
-            <a lass="next_link" rel="next" href="{{ path(route, query|merge({(pageParameterName): next})) }}">{{ 'Siguiente'|trans({}, 'KnpPaginatorBundle') }}&nbsp;&raquo;</a>
+            <a class="next_link" rel="next" href="{{ path(route, query|merge({(pageParameterName): next})) }}">{{ 'Siguiente'|trans({}, 'KnpPaginatorBundle') }}&nbsp;&raquo;</a>
         </li>
     {% else %}
         <li class="disabled">

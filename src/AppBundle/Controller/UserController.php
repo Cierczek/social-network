@@ -21,15 +21,18 @@ use AppBundle\Form\UserType;
  *
  * @author rcierczek
  */
-class UserController extends Controller {
+class UserController extends Controller
+{
 
     private $session;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->session = new Session();
     }
 
-    public function loginAction(Request $request) {
+    public function loginAction(Request $request)
+    {
 
         if (is_object($this->getUser())) {
             return $this->redirect("home");
@@ -40,20 +43,21 @@ class UserController extends Controller {
         $lastUsername = $authenticationUtils->getLastUsername();
 
         return $this->render('AppBundle:User:login.html.twig', [
-                    "last_username" => $lastUsername,
-                    "errors" => $errors
+            "last_username" => $lastUsername,
+            "errors" => $errors
         ]);
     }
 
-    public function registerAction(Request $request) {
+    public function registerAction(Request $request)
+    {
 
         if (is_object($this->getUser())) {
             return $this->redirect("home");
         }
-        
+
         $user = new User();
         $form = $this->createForm(RegisterType::class, $user);
-        
+
         $form->handleRequest($request);
         if ($form->isSubmitted()) {
             if ($form->isValid()) {
@@ -61,10 +65,10 @@ class UserController extends Controller {
                 $em = $this->getDoctrine()->getManager();
 
                 $query = $em->createQuery("SELECT u FROM BackendBundle:User u WHERE u.email = :email OR u.nick = :nick")
-                        ->setParameter("email", $form->get("email")->getData())
-                        ->setParameter("nick", $form->get("nick")->getData());
+                    ->setParameter("email", $form->get("email")->getData())
+                    ->setParameter("nick", $form->get("nick")->getData());
                 $user_isset = $query->getResult();
-                
+
                 if (count($user_isset) == 0) {
                     $factory = $this->get("security.encoder_factory");
                     $encoder = $factory->getEncoder($user);
@@ -80,27 +84,30 @@ class UserController extends Controller {
 
                     if ($flush == null) {
                         $status = "Te has registrado correctamente";
-                        $this->session->getFlashBag()->add("success", $status);
+                        $statusType = 'success';
 
-                        return $this->redirect("login");
                     } else {
                         $status = "No te has registrado correctamente";
+                        $statusType = 'danger';
                     }
                 } else {
                     $status = "El usuario ya existe";
+                    $statusType = 'danger';
                 }
             } else {
                 $status = "No te has registrado correctamente";
+                $statusType = 'danger';
             }
 
-            $this->session->getFlashBag()->add("danger", $status);
+            $this->session->getFlashBag()->add($statusType, $status);
         }
         return $this->render('AppBundle:User:register.html.twig', [
-                "form" => $form->createView()
+            "form" => $form->createView()
         ]);
     }
 
-    public function nickTestAction(Request $request) {
+    public function nickTestAction(Request $request)
+    {
         $nick = $request->get("nick");
 
         $em = $this->getDoctrine()->getManager();
@@ -117,7 +124,8 @@ class UserController extends Controller {
         return new Response($result);
     }
 
-    public function emailTestAction(Request $request) {
+    public function emailTestAction(Request $request)
+    {
         $email = $request->get("email");
 
         $em = $this->getDoctrine()->getManager();
@@ -134,23 +142,24 @@ class UserController extends Controller {
         return new Response($result);
     }
 
-    public function editUserAction(Request $request) {
+    public function editUserAction(Request $request)
+    {
 
         $user = $this->getUser();
         $user_image = $user->getImage();
         $form = $this->createForm(UserType::class, $user);
 
         $form->handleRequest($request);
-   
+
         if ($form->isSubmitted()) {
             if ($form->isValid()) {
                 $em = $this->getDoctrine()->getManager();
 
                 $query = $em->createQuery("SELECT u FROM BackendBundle:User u WHERE u.email = :email OR u.nick = :nick")
-                        ->setParameter("email", $form->get("email")->getData())
-                        ->setParameter("nick", $form->get("nick")->getData());
+                    ->setParameter("email", $form->get("email")->getData())
+                    ->setParameter("nick", $form->get("nick")->getData());
                 $user_isset = $query->getResult();
-                              
+
                 if (count($user_isset) == 1) {
 
                     $file = $form["image"]->getData();
@@ -158,12 +167,12 @@ class UserController extends Controller {
                     if ($file != null && !empty($file)) {
                         $ext = $file->guessExtension();
                         if ($ext == "jpg" || $ext == "jpeg" || $ext == "png") {
-                            $file_name = $user->getId().'.'.time().'.'.$ext;
-                            $destination = "uploads/users/".$user->getEmail().$user->getId();
+                            $file_name = $user->getId() . '.' . time() . '.' . $ext;
+                            $destination = "uploads/users/" . $user->getEmail() . $user->getId();
                             if (!file_exists($destination)) {
                                 mkdir($destination, 0777, true);
                             }
-                            $file->move($destination,$file_name);
+                            $file->move($destination, $file_name);
                             $user->setImage($file_name);
                         }
                     } else {
@@ -191,45 +200,51 @@ class UserController extends Controller {
             return $this->redirect("my-data");
         }
         return $this->render('AppBundle:User:edit_user.html.twig', [
-                    "form" => $form->createView()
+            "form" => $form->createView()
         ]);
     }
-    
-    
-    public function usersAction(Request $request){
-        
-       $em = $this->getDoctrine()->getManager();
-    
-       $users = $em->getRepository('BackendBundle:User')->findAll(); 
-       
-       $paginator = $this->get("knp_paginator");
-       $pagination = $paginator->paginate($users, $request->query->getInt("page", 1), 5);
-        
+
+
+    public function usersAction(Request $request)
+    {
+
+        if (is_object($this->getUser()) == false) {
+            return $this->redirect("login");
+        }
+
+        $em = $this->getDoctrine()->getManager();
+
+        $users = $em->getRepository('BackendBundle:User')->findAll();
+
+        $paginator = $this->get("knp_paginator");
+        $pagination = $paginator->paginate($users, $request->query->getInt("page", 1), 5);
+
         return $this->render('AppBundle:User:users.html.twig', [
-                    "pagination" => $pagination
+            "pagination" => $pagination
         ]);
     }
-    
-    public function searchAction(Request $request){
-        
-       $em = $this->getDoctrine()->getManager();
-       
-       $search = $request->query->get("search", null);
-       
-       if($search == null){
-           return $this->redirect($this->generateUrl("home_publications"));
-       }
-       
-       $dql = "Select u From BackendBundle:User u Where u.name Like :search "
-               . "OR u.surname Like :search OR u.nick Like :search";
-       
-       $query = $em->createQuery($dql)->setParameter("search", "%$search%");
-      
-       $paginator = $this->get("knp_paginator");
-       $pagination = $paginator->paginate($query, $request->query->getInt("page", 1), 5);
-        
+
+    public function searchAction(Request $request)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+
+        $search = $request->query->get("search", null);
+
+        if ($search == null) {
+            return $this->redirect($this->generateUrl("home_publications"));
+        }
+
+        $dql = "Select u From BackendBundle:User u Where u.name Like :search "
+            . "OR u.surname Like :search OR u.nick Like :search";
+
+        $query = $em->createQuery($dql)->setParameter("search", "%$search%");
+
+        $paginator = $this->get("knp_paginator");
+        $pagination = $paginator->paginate($query, $request->query->getInt("page", 1), 5);
+
         return $this->render('AppBundle:User:users.html.twig', [
-                    "pagination" => $pagination
+            "pagination" => $pagination
         ]);
     }
 
